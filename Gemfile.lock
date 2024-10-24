@@ -236,6 +236,8 @@ GEM
       rubocop-rails
     ruby-progressbar (1.13.0)
     securerandom (0.3.1)
+    shoulda-matchers (4.5.1)
+      activesupport (>= 4.2.0)
     sqlite3 (2.1.1)
       mini_portile2 (~> 2.8.0)
     sqlite3 (2.1.1-arm64-darwin)
@@ -268,6 +270,7 @@ DEPENDENCIES
   rails (~> 7.2.1)
   rspec-rails
   rubocop-rails-omakase
+  shoulda-matchers (~> 4.0)
   sqlite3 (>= 1.4)
   tzinfo-data
 
