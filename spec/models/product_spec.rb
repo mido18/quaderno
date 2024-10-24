@@ -5,33 +5,33 @@ require 'rails_helper'
 RSpec.describe Product, type: :model do
   describe 'validations' do
     it 'is valid with valid attributes' do
-      product = Product.new(name: 'Cooking Class', price: 100.00, product_type: 'onsite_service')
+      product = FactoryBot.build(:product)
       expect(product).to be_valid
     end
 
     it 'is not valid without a name' do
-      product = Product.new(name: nil, price: 100.00, product_type: 'onsite_service')
+      product = FactoryBot.build(:product, name: nil)
       expect(product).to_not be_valid
     end
 
     it 'is not valid without a price' do
-      product = Product.new(name: 'Cooking Class', price: nil, product_type: 'onsite_service')
+      product = FactoryBot.build(:product, price: nil)
       expect(product).to_not be_valid
     end
 
     it 'is not valid with a negative price' do
-      product = Product.new(name: 'Cooking Class', price: -10.00, product_type: 'onsite_service')
+      product = FactoryBot.build(:product, price: -10.00)
       expect(product).to_not be_valid
     end
 
     it 'is not valid without a product_type' do
-      product = Product.new(name: 'Cooking Class', price: 100.00, product_type: nil)
+      product = Product.new(name: 'Cooking Class', product_type: nil)
       expect(product).to_not be_valid
     end
 
     it 'is not valid with a duplicate name' do
-      Product.create(name: 'Cooking Class', price: 100.00, product_type: 'onsite_service')
-      product = Product.new(name: 'Cooking Class', price: 150.00, product_type: 'onsite_service')
+      FactoryBot.create(:product, name: 'Unique Product')
+      product = FactoryBot.build(:product, name: 'Unique Product')
       expect(product).to_not be_valid
     end
   end
