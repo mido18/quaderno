@@ -1,6 +1,12 @@
 # spec/factories.rb
 
 FactoryBot.define do
+  factory :tax_rate do
+    country { Faker::Address.country }  # Generates a random country name
+    product_type { [:good, :digital_service, :onsite_service].sample }  # Randomly selects one of the product types
+    vat_rate { Faker::Number.decimal(l_digits: 2, r_digits: 2) }  # Generates a random VAT rate with two decimal places
+  end
+
   factory :transaction do
     association :user  # Automatically creates a user using the user factory
     association :product  # Automatically creates a product using the product factory
