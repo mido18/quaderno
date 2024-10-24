@@ -10,27 +10,27 @@ RSpec.describe User, type: :model do
     end
 
     it 'is not valid without a name' do
-      user = User.new(name: nil, email: 'john@example.com', user_type: :individual, country: 'Spain')
+      user = FactoryBot.build(:user, name: nil)
       expect(user).to_not be_valid
     end
 
     it 'is not valid without an email' do
-      user = User.new(name: 'John Doe', email: nil, user_type: :individual, country: 'Spain')
+      user = FactoryBot.build(:user, email: nil)
       expect(user).to_not be_valid
     end
 
     it 'is not valid without a user_type' do
-      user = User.new(name: 'John Doe', email: 'john@example.com', user_type: nil, country: 'Spain')
+      user = FactoryBot.build(:user, user_type: nil)
       expect(user).to_not be_valid
     end
 
     it 'is not valid without a country' do
-      user = User.new(name: 'John Doe', email: 'john@example.com', user_type: :individual, country: nil)
+      user = FactoryBot.build(:user, country: nil)
       expect(user).to_not be_valid
     end
 
     it 'is not valid with a duplicate email' do
-      User.create(name: 'Jane Doe', email: 'john@example.com', user_type: :individual, country: 'Spain')
+      FactoryBot.create(:user,  email: 'john@example.com')
       user = User.new(name: 'John Doe', email: 'john@example.com', user_type: :individual, country: 'Spain')
       expect(user).to_not be_valid
     end
