@@ -65,7 +65,7 @@ RSpec.describe Transaction, type: :model do
 
 
     it 'defines status enum' do
-      expect(Transaction.statuses).to eq({ 'completed' => 0, 'pending' => 1, 'refunded' => 2 })
+      expect(Transaction.statuses).to eq({ 'completed' => 0, 'pending' => 1, 'refunded' => 2, "reverse_charge" => 3, "export" => 4 })
     end
 
     it 'returns completed for status 0' do
@@ -81,6 +81,50 @@ RSpec.describe Transaction, type: :model do
     it 'returns refunded for status 2' do
       transaction = Transaction.new(status: :refunded)
       expect(transaction.status).to eq('refunded')
+    end
+  end
+
+
+  describe '#process_sale' do
+    let(:transaction) { FactoryBot.build(:transaction) }
+
+    context 'when the product is a good' do
+      before do
+        transaction.product = FactoryBot.build(:product, product_type: 'good')
+      end
+
+      it 'uses the PhysicalProductTaxStrategy' do
+        strategy = instance_double(PhysicalProductTaxStrategy)
+        allow(PhysicalProductTaxStrategy).to receive(:new).and_return(strategy)
+        expect(strategy).to receive(:calculate_tax).with(transaction)
+        transaction.process_sale
+      end
+    end
+
+    context 'when the product is a digital service' do
+      before do
+        transaction.product = FactoryBot.build(:product, product_type: 'digital_service')
+      end
+
+      it 'uses the DigitalServiceTaxStrategy' do
+        strategy = instance_double(DigitalServiceTaxStrategy)
+        allow(DigitalServiceTaxStrategy).to receive(:new).and_return(strategy)
+        expect(strategy).to receive(:calculate_tax).with(transaction)
+        transaction.process_sale
+      end
+    end
+
+    context 'when the product is an onsite service' do
+      before do
+        transaction.product = FactoryBot.build(:product, product_type: 'onsite_service')
+      end
+
+      it 'uses the OnsiteServiceTaxStrategy' do
+        strategy = instance_double(OnsiteServiceTaxStrategy)
+        allow(OnsiteServiceTaxStrategy).to receive(:new).and_return(strategy)
+        expect(strategy).to receive(:calculate_tax).with(transaction)
+        transaction.process_sale
+      end
     end
   end
 end
