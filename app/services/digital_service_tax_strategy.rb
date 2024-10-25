@@ -3,11 +3,9 @@ class DigitalServiceTaxStrategy < TaxCalculationStrategy
     if transaction.user.country == "Spain"
       apply_vat(transaction, "digital_service")
     elsif transaction.eu_country?(transaction.user.country)
-      transaction.user.user_type == "individual" ? apply_local_vat(transaction, transaction.user.country, "digital_service") : transaction.mark_reverse_charge
+      transaction.user.user_type == "individual" ? apply_local_vat(transaction, transaction.user.country, "digital_service") : set_tax_and_status(transaction, 0, "reverse_charge")
     else
-      transaction.tax_applied = 0
-      transaction.status = "completed"
-      transaction.save
+      set_tax_and_status(transaction, 0, "export")
     end
   end
 
