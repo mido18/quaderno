@@ -5,5 +5,5 @@ class Product < ApplicationRecord
     validates :product_type, presence: true
 
     # Enum for product_type
-    enum product_type: { good: "good", digital_service: "digital_service", onsite_service: "onsite_service" }
+    enum product_type: { good: 0, digital_service: 1, onsite_service: 2 }
 end

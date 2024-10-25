@@ -38,7 +38,7 @@ RSpec.describe Product, type: :model do
 
   describe 'enums' do
     it 'defines product_type enum' do
-      expect(Product.product_types).to eq({ 'good' => 'good', 'digital_service' => 'digital_service', 'onsite_service' => 'onsite_service' })
+      expect(Product.product_types).to eq({ 'good' => 0, 'digital_service' => 1, 'onsite_service' => 2 })
     end
 
     it 'returns good for product_type good' do
