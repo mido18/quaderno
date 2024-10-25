@@ -43,4 +43,10 @@ class Transaction < ApplicationRecord
       puts "No strategy found for product type: #{product.product_type}" # Debugging output
     end
   end
+
+  def eu_country?(country)
+    Europe::Countries::Reversed.generate("name").find do | key, _value |
+      key == country
+    end.present?
+  end
 end

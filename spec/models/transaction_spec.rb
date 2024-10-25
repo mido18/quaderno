@@ -129,6 +129,44 @@ RSpec.describe Transaction, type: :model do
     end
   end
 
+  describe '#eu_country?' do
+    let(:transaction) { Transaction.new }
+
+    context 'when the country is an EU country' do
+      it 'returns true for France' do
+        expect(transaction.eu_country?('France')).to be true
+      end
+
+      it 'returns true for Germany' do
+        expect(transaction.eu_country?('Germany')).to be true
+      end
+
+      it 'returns true for Spain' do
+        expect(transaction.eu_country?('Spain')).to be true
+      end
+    end
+
+    context 'when the country is not an EU country' do
+      it 'returns false for the USA' do
+        expect(transaction.eu_country?('USA')).to be false
+      end
+
+      it 'returns false for Canada' do
+        expect(transaction.eu_country?('Canada')).to be false
+      end
+
+      it 'returns false for Australia' do
+        expect(transaction.eu_country?('Australia')).to be false
+      end
+    end
+
+    context 'when the country is not recognized' do
+      it 'returns false for an unknown country' do
+        expect(transaction.eu_country?('UnknownCountry')).to be false
+      end
+    end
+  end
+
   describe 'callbacks' do
     let(:user) { FactoryBot.create(:user) }
     let(:tax_rate) { FactoryBot.create(:tax_rate, country: "Spain", product_type: "good", vat_rate: "21") }
