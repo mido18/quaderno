@@ -37,9 +37,10 @@ RSpec.describe Transaction, type: :model do
       expect(transaction).to_not be_valid
     end
 
-    it 'is not valid without a status' do
+    it 'is will set a default status' do
       transaction = FactoryBot.build(:transaction, status: nil)
-      expect(transaction).to_not be_valid
+      expect(transaction).to be_valid
+      expect(transaction.status).to eq("pending")
     end
   end
 
@@ -125,6 +126,31 @@ RSpec.describe Transaction, type: :model do
         expect(strategy).to receive(:calculate_tax).with(transaction)
         transaction.process_sale
       end
+    end
+  end
+
+  describe 'callbacks' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:tax_rate) { FactoryBot.create(:tax_rate, country: "Spain", product_type: "good", vat_rate: "21") }
+    let(:product) { FactoryBot.create(:product, product_type: "good") }
+
+    it 'calls process_sale after creating a transaction' do
+      # Use a spy to check if process_sale is called
+      transaction = Transaction.new(
+        user: user,
+        product: product,
+        transaction_type: 'good',
+        transaction_date: Date.today,
+      )
+
+      # Spy on the process_sale method
+      allow(transaction).to receive(:process_sale)
+
+      # Save the transaction, which should trigger the after_create callback
+      transaction.save
+
+      # Expect process_sale to have been called
+      expect(transaction).to have_received(:process_sale)
     end
   end
 end

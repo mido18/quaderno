@@ -14,8 +14,19 @@ class Transaction < ApplicationRecord
   # Enum for status
   enum status: { completed: 0, pending: 1, refunded: 2, reverse_charge: 3, export: 4 }
 
+  before_validation :set_default_status
+
+  after_create :process_sale
+
+  # Method to set default status before validation
+  def set_default_status
+    self.status ||= "pending" # Set default status to 'pending' if not already set
+  end
+
   # Method to process the sale
   def process_sale
+    puts "Processing sale for transaction ID: #{id}" # Debugging output
+
     strategy = case product.product_type
     when "good"
                  PhysicalProductTaxStrategy.new
@@ -25,6 +36,11 @@ class Transaction < ApplicationRecord
                  OnsiteServiceTaxStrategy.new
     end
 
-    strategy.calculate_tax(self) if strategy
+    if strategy
+      strategy.calculate_tax(self)
+      puts "Tax calculated for transaction ID: #{id}" # Debugging output
+    else
+      puts "No strategy found for product type: #{product.product_type}" # Debugging output
+    end
   end
 end
