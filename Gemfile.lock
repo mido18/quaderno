@@ -89,6 +89,7 @@ GEM
     diff-lcs (1.5.1)
     drb (2.2.1)
     erubi (1.13.0)
+    europe (0.0.22)
     factory_bot (6.4.6)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.4.3)
@@ -264,6 +265,7 @@ DEPENDENCIES
   bootsnap
   brakeman
   debug
+  europe
   factory_bot_rails
   faker
   puma (>= 5.0)
