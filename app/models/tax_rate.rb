@@ -3,6 +3,7 @@ class TaxRate < ApplicationRecord
   validates :country, presence: true
   validates :product_type, presence: true
   validates :vat_rate, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :country, uniqueness: { scope: :product_type }
 
   # Enum for product_type
   enum product_type: { good: 0, digital_service: 1, onsite_service: 2 }
