@@ -71,7 +71,7 @@ RSpec.describe DigitalServiceTaxStrategy do
       it 'sets tax_applied to 0 and status to completed' do
         expect(transaction).to receive(:eu_country?).with("USA")
         expect(transaction).to receive(:tax_applied=).with(0)
-        expect(transaction).to receive(:status=).with("export")
+        expect(transaction).to receive(:status=).with("completed")
 
         strategy.calculate_tax(transaction)
       end
